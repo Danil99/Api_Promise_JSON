@@ -2,23 +2,32 @@
 
 function getData(url) {
   return new Promise(function (resolve, reject) {
-    var xhr = new XMLHttpRequest();
+    // const xhr = new XMLHttpRequest();
+    //
+    // xhr.open('GET', url);
+    //
+    // xhr.onload = function () {
+    //   if (xhr.status === 200) {
+    //     let json = JSON.parse(xhr.response);
+    //     resolve(json.Search);
+    //   } else {
+    //     reject('Error');
+    //   }
+    // }
+    //
+    // xhr.onerror = function () {
+    //   reject('Error');
+    // }
+    //
+    // xhr.send();
 
-    xhr.open('GET', url);
-    xhr.send();
-
-    xhr.onload = function () {
-      if (xhr.status === 200) {
-        var json = JSON.parse(xhr.response);
-        resolve(json.Search);
-      } else {
-        reject('Error');
-      }
-    };
-
-    xhr.onerror = function () {
-      reject('Error');
-    };
+    fetch(url).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      resolve(json.Search);
+    }).catch(function (error) {
+      reject(error);
+    });
   });
 }
 

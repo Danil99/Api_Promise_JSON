@@ -1,22 +1,32 @@
 function getData(url) {
   return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
+    // const xhr = new XMLHttpRequest();
+    //
+    // xhr.open('GET', url);
+    //
+    // xhr.onload = function () {
+    //   if (xhr.status === 200) {
+    //     let json = JSON.parse(xhr.response);
+    //     resolve(json.Search);
+    //   } else {
+    //     reject('Error');
+    //   }
+    // }
+    //
+    // xhr.onerror = function () {
+    //   reject('Error');
+    // }
+    //
+    // xhr.send();
 
-    xhr.open('GET', url);
-    xhr.send();
-
-    xhr.onload = function () {
-      if (xhr.status === 200) {
-        let json = JSON.parse(xhr.response);
-        resolve(json.Search);
-      } else {
-        reject('Error');
-      }
-    }
-
-    xhr.onerror = function () {
-      reject('Error');
-    }
+    fetch(url)
+      .then(response => response.json())
+      .then(json => {
+        resolve(json.Search)
+      })
+      .catch(error => {
+        reject(error)
+      })
 
   })
 }
