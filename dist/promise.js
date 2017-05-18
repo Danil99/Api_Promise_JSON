@@ -2,25 +2,6 @@
 
 function getData(url) {
   return new Promise(function (resolve, reject) {
-    // const xhr = new XMLHttpRequest();
-    //
-    // xhr.open('GET', url);
-    //
-    // xhr.onload = function () {
-    //   if (xhr.status === 200) {
-    //     let json = JSON.parse(xhr.response);
-    //     resolve(json.Search);
-    //   } else {
-    //     reject('Error');
-    //   }
-    // }
-    //
-    // xhr.onerror = function () {
-    //   reject('Error');
-    // }
-    //
-    // xhr.send();
-
     fetch(url).then(function (response) {
       return response.json();
     }).then(function (json) {

@@ -15,11 +15,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var app = (0, _express2.default)();
 var db = void 0;
 
-app.use(_bodyParser2.default.json());
 app.use(_bodyParser2.default.urlencoded({ extended: true }));
+app.use(_bodyParser2.default.json());
 
 app.use(_express2.default.static('../dist'));
-app.set('views', '../dist');
 
 app.get('/', function (req, res) {
   res.render('index');
@@ -27,13 +26,13 @@ app.get('/', function (req, res) {
 
 var artists = [{
   id: 1,
-  name: 'Danya'
+  name: 'Danil'
 }, {
   id: 2,
   name: 'Max'
 }];
 
-app.get('/artists', function (req, res) {
+app.route('/artists').get(function (req, res) {
   db.collection('artists').find().toArray(function (err, docs) {
     if (err) {
       console.log(err);
@@ -41,9 +40,7 @@ app.get('/artists', function (req, res) {
     }
     res.send(docs);
   });
-});
-
-app.post('/artist', function (req, res) {
+}).post(function (req, res) {
   var artist = {
     name: req.body.name
   };
@@ -56,32 +53,25 @@ app.post('/artist', function (req, res) {
   });
 });
 
-app.put('/artist/:id', function (req, res) {
-  db.collection('artists').updateOne({ _id: (0, _mongodb.ObjectID)(req.params.id) }, { name: req.body.name }, function (err, result) {
-    if (err) {
-      console.log(err);
-      return res.sendStatus(500);
-    }
-    res.sendStatus(200);
+app.route('/artists/:id').put(function (req, res) {
+  var artist = artists.find(function (artist) {
+    return artist.id === Number(req.params.id);
   });
-});
-
-app.delete('/artist/:id', function (req, res) {
-  db.collection('artists').deleteOne({ _id: (0, _mongodb.ObjectID)(req.params.id) }, function (err, result) {
-    if (err) {
-      console.log(err);
-      return res.sendStatus(500);
-    }
-    res.sendStatus(200);
+  artist.name = req.body.name;
+  res.send(artist);
+}).delete(function (req, res) {
+  artists = artists.filter(function (artist) {
+    return artist.id !== Number(req.params.id);
   });
+  res.sendStatus(200);
 });
 
 _mongodb.MongoClient.connect('mongodb://localhost:27017/myapi', function (err, database) {
   if (err) {
-    return console.log(err);
+    console.log(err);
   }
   db = database;
-  app.listen(3080, function () {
-    console.log("Server started");
+  app.listen(3080, function (req, res) {
+    console.log('Server started');
   });
 });
