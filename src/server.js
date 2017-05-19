@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { MongoClient } from 'mongodb';
+import { ObjectID } from 'mongodb';
 
 let app = express();
 let db;
@@ -50,13 +51,29 @@ app.route('/artists')
 
 app.route('/artists/:id')
   .put((req, res) => {
-    let artist = artists.find(artist => artist.id === Number(req.params.id));
-    artist.name = req.body.name;
-    res.send(artist);
+    db.collection('artists').updateOne(
+      { _id: ObjectID(req.params.id) },
+      { name: req.body.name },
+      (err, result) => {
+        if(err) {
+          console.log(err);
+          return res.sendStatus(500);
+        }
+        res.sendStatus(200);
+      }
+    )
   })
   .delete((req, res) => {
-    artists = artists.filter(artist => artist.id !== Number(req.params.id));
-    res.sendStatus(200);
+    db.collection('artists').deleteOne(
+      { _id: ObjectID(req.params.id) },
+      (err, result) => {
+        if(err) {
+          console.log(err);
+          return res.sendStatus(500);
+        }
+        res.sendStatus(200);
+      }
+    )
   })
 
 MongoClient.connect('mongodb://localhost:27017/myapi', (err, database) => {

@@ -1,10 +1,9 @@
 {
   "name": "skb1",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
   "scripts": {
-    "watch": "babel src -d dist -w"
+    "watch": "babel src -d dist -w",
+    "server": "nodemon dist/server.js"
   },
   "babel": {
     "presets": [

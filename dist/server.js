@@ -54,16 +54,21 @@ app.route('/artists').get(function (req, res) {
 });
 
 app.route('/artists/:id').put(function (req, res) {
-  var artist = artists.find(function (artist) {
-    return artist.id === Number(req.params.id);
+  db.collection('artists').updateOne({ _id: (0, _mongodb.ObjectID)(req.params.id) }, { name: req.body.name }, function (err, result) {
+    if (err) {
+      console.log(err);
+      return res.sendStatus(500);
+    }
+    res.sendStatus(200);
   });
-  artist.name = req.body.name;
-  res.send(artist);
 }).delete(function (req, res) {
-  artists = artists.filter(function (artist) {
-    return artist.id !== Number(req.params.id);
+  db.collection('artists').deleteOne({ _id: (0, _mongodb.ObjectID)(req.params.id) }, function (err, result) {
+    if (err) {
+      console.log(err);
+      return res.sendStatus(500);
+    }
+    res.sendStatus(200);
   });
-  res.sendStatus(200);
 });
 
 _mongodb.MongoClient.connect('mongodb://localhost:27017/myapi', function (err, database) {

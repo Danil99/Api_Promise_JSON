@@ -1,18 +1,13 @@
+let movieList = document.getElementById('movies');
+
 function getData(url) {
   return new Promise((resolve, reject) => {
     fetch(url)
       .then(response => response.json())
-      .then(json => {
-        resolve(json.Search)
-      })
-      .catch(error => {
-        reject(error)
-      })
-
+      .then(json => resolve(json.Search))
+      .catch(error => reject(error))
   })
 }
-
-let movieList = document.getElementById('movies');
 
 function addMovieToList(movie) {
   let img = document.createElement('img');
@@ -36,8 +31,4 @@ const superman = getData('http://omdbapi.com/?s=superman');
 
 Promise.race([batman, superman])
   .then(action)
-  .catch(err);
-
-// getData(`http://omdbapi.com/?s=${nameMovie}`)
-//   .then(action)
-//   .catch(err);
+  .catch(err)
